@@ -12,7 +12,7 @@ from first_day.code.Calculator import Calculator
 def get_data():
     with open("calc.yaml") as f:
         datas = yaml.safe_load(f)
-    return datas['add']['datas'], datas['add']['ids']
+    return datas['add']['datas'], datas['add']['ids'], datas['div']['datas'], datas['div']['ids']
 
 
 class TestCalc:
@@ -29,7 +29,7 @@ class TestCalc:
     def test_add(self, a, b, result):
         assert result == self.calc.add(a, b)
 
-    @pytest.mark.parametrize("a,b,result", datas[0], ids=datas[1])
+    @pytest.mark.parametrize("a,b,result", datas[2], ids=datas[3])
     def test_div(self, a, b, result):
         try:
             assert result == self.calc.div(a, b)
