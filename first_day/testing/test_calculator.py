@@ -17,34 +17,38 @@ def get_data(name):
     return datas, ids
 
 
+@pytest.fixture(params=get_data('add')[0], ids=get_data('add')[1])
+def get_datas_add_fixture(request):
+    return request.param
+
+
+@pytest.fixture(params=get_data('div')[0], ids=get_data('div')[1])
+def get_datas_div_fixture(request):
+    return request.param
+
+
 class TestCalc:
     # datas = get_data(
     add_datas = get_data('add')
     div_datas = get_data('div')
 
-    def setup_class(self):
-        print("\n开始计算")
-        self.calc = Calculator()
-
-    def teardown_class(self):
-        print("\n结束计算")
-
-    @pytest.mark.parametrize("a,b,result", add_datas[0], ids=add_datas[1])
-    def test_add(self, a, b, result):
-        assert result == self.calc.add(a, b)
+    # @pytest.mark.parametrize("a,b,result", add_datas[0], ids=add_datas[1])
+    def test_add(self, get_instance, get_datas_add_fixture):
+        f = get_datas_add_fixture
+        assert f[2] == get_instance.add(f[0], f[1])
 
     # 浮点数
-    # 或者 from decimal import Decimal
     @pytest.mark.parametrize("a,b,result", [(0.1, 0.1, 0.2), (0.1, 0.2, 0.3)])
-    def test_add_float(self, a, b, result):
-        assert result == round(self.calc.add(a, b), 2)
+    def test_add_float(self, get_instance, a, b, result):
+        assert result == round(get_instance.add(a, b), 2)
 
-    @pytest.mark.parametrize("a,b,result", div_datas[0], ids=div_datas[1])
-    def test_div(self, a, b, result):
+    # @pytest.mark.parametrize("a,b,result", div_datas[0], ids=div_datas[1])
+    def test_div(self, get_instance, get_datas_div_fixture):
         try:
-            assert result == self.calc.div(a, b)
+            f = get_datas_div_fixture
+            assert f[2] == get_instance.div(f[0], f[1])
         except ZeroDivisionError:
             print("分母不能为零")
-        # 捕获异常
-        # with pytest.raises(ZeroDivisionError):
-        #     result = a/b
+    # 捕获异常
+    # with pytest.raises(ZeroDivisionError):
+    #     result = a/b
