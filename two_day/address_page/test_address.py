@@ -9,4 +9,5 @@ from Hogwarts_homework_17.two_day.address_page.main_page import MainPage
 class TestAddress:
     def test_add_member(self):
         main = MainPage()
-        main.goto_address().add_member()
+        # 首页-点击通讯录-添加成员
+        main.goto_address().goto_add_member()
